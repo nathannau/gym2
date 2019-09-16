@@ -1,3 +1,6 @@
 {
-    "python.pythonPath": "D:\\Users\\apybj\\AppData\\Local\\Continuum\\anaconda3\\envs\\GymOpenAI\\python.exe"
+    "python.pythonPath": "C:\\Users\\natha\\Anaconda3\\envs\\gym\\python.exe",
+    "python.linting.pylintEnabled": false,
+    "python.linting.pep8Enabled": true,
+    "python.linting.enabled": true
 }
