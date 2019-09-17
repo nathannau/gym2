@@ -1,27 +1,28 @@
 import gym
-import tensorflow_core as tf
+import tensorflow as tf
 import numpy as np
 import random
 import matplotlib.pyplot as plt
 from gym.envs.classic_control import CartPoleEnv
 import tool
-# import tensorflow.keras as Keras
-# from tensorflow.keras import Model
 
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+# os.environ['AUTOGRAPH_VERBOSITY'] = '10'
 
-# mem = tool.Memory(50)
-# tf.version.VERSION
-# tool.Memory.Memory(50)
-print(tf.__version__)
 print(tf.version.VERSION)
 
 env = gym.make('CartPole-v1')
-model = tool.DQN.DQNModel(num_actions=env.action_space.n)
+
+model = tool.DQNModel(num_actions=env.action_space.n)
 
 obs = env.reset()
-print(obs, obs[None, :])
+# print("obs, obs[None, :]")
+# print(obs, obs[None, :])
+# a = model.predict(obs[None, :])
 action, value = model.action_value(obs[None, :])
-
+# print(a)
+# print("action, value")
 print(action, value)
 exit()
 # print(env.action_space)

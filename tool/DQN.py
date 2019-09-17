@@ -18,7 +18,7 @@ class ProbabilityDistribution(tf.keras.Model):
 
 class DQNModel(tf.keras.Model):
     def __init__(self, num_actions):
-        super().__init__('mlp_policy')
+        super(DQNModel, self).__init__()
         # no tf.get_variable(), just simple Keras API
         self.hidden1 = kl.Dense(128, activation='relu')
         self.hidden2 = kl.Dense(128, activation='relu')
@@ -27,13 +27,16 @@ class DQNModel(tf.keras.Model):
         self.logits = kl.Dense(num_actions, name='policy_logits')
         self.dist = ProbabilityDistribution()
 
+    @tf.function
     def call(self, inputs):
         # inputs is a numpy array, convert to Tensor
         # x = tf.compat.v2.convert_to_tensor(inputs, dtype=tf.float32)
+        # x = inputs  # tf.convert_to_tensor(inputs, dtype=tf.float32)
         x = tf.convert_to_tensor(inputs, dtype=tf.float32)
         # separate hidden layers from the same input tensor
         hidden_logs = self.hidden1(x)
         hidden_vals = self.hidden2(x)
+        # return x  #, x
         return self.logits(hidden_logs), self.value(hidden_vals)
 
     def action_value(self, obs):
@@ -42,4 +45,5 @@ class DQNModel(tf.keras.Model):
         action = self.dist.predict(logits)
         # a simpler option, will become clear later why we don't use it
         # action = tf.random.categorical(logits, 1)
+        # return 0, 0
         return np.squeeze(action, axis=-1), np.squeeze(value, axis=-1)
