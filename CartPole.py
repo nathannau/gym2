@@ -15,16 +15,33 @@ print(tf.version.VERSION)
 env = gym.make('CartPole-v1')
 
 model = tool.DQNModel(num_actions=env.action_space.n)
+if input("Reload model : ") == "y":
+    model.load_weights('truc_w.tf')
+    # model = tf.keras.models.load_model('truc.tf', compile=False)
+# else:
+    # model = tool.DQNModel(num_actions=env.action_space.n)
 
-obs = env.reset()
-# print("obs, obs[None, :]")
-# print(obs, obs[None, :])
-# a = model.predict(obs[None, :])
-action, value = model.action_value(obs[None, :])
-# print(a)
-# print("action, value")
-print(action, value)
+# obs = env.reset()
+# # print("obs, obs[None, :]")
+# # print(obs, obs[None, :])
+# # a = model.predict(obs[None, :])
+# action, value = model.action_value(obs[None, :])
+# # a = model.action_value(obs[None, :])
+# # print(a)
+# # print("action, value")
+# print(action, value)
+
+agent = tool.DQNAgent(model)
+
+rewards_history = agent.train(env, updates=200)
+model.save_weights('truc_w.tf')
+# tf.keras.models.save_model(model, 'truc.tf')
+print("Finished training, testing...")
+print("%d out of 200" % agent.exploit(env, True))
+# agent.exploit(env, True)
+
 exit()
+
 # print(env.action_space)
 # print(env.observation_space)
 # print(env.observation_space.shape)
@@ -59,7 +76,7 @@ while not done:
     elif state[1] < -1:
         action = 0
     else:
-        action = 1-action
+        action = 1 - action
 
     print(state, action)
 

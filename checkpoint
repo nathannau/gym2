@@ -1,0 +1,2 @@
+model_checkpoint_path: "truc_w.tf"
+all_model_checkpoint_paths: "truc_w.tf"
