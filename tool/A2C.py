@@ -5,7 +5,7 @@ import tensorflow.keras.losses as kls
 import tensorflow.keras.optimizers as ko
 
 
-class DQNAgent:
+class A2CAgent:
     def __init__(self, model):
         # hyperparameters for loss terms
         self.params = {'value': 0.5, 'entropy': 0.0001, 'gamma': 0.99}
@@ -95,18 +95,27 @@ class ProbabilityDistribution(tf.keras.Model):
         return tf.squeeze(tf.random.categorical(logits, 1), axis=-1)
 
 
-class DQNModel(tf.keras.Model):
+class A2CModel(tf.keras.Model):
     def __init__(self, num_actions):
         super(DQNModel, self).__init__()
+        # no tf.get_variable(), just simple Keras API
         self.hidden1 = kl.Dense(128, activation='relu')
+        self.hidden2 = kl.Dense(128, activation='relu')
+        self.value = kl.Dense(1, name='value')
+        # logits are unnormalized log probabilities
         self.logits = kl.Dense(num_actions, name='policy_logits')
-        # self.dist = ProbabilityDistribution()
+        self.dist = ProbabilityDistribution()
 
     def call(self, inputs):
         # inputs is a numpy array, convert to Tensor
+        # x = tf.compat.v2.convert_to_tensor(inputs, dtype=tf.float32)
+        # x = inputs  # tf.convert_to_tensor(inputs, dtype=tf.float32)
         x = tf.convert_to_tensor(inputs, dtype=tf.float32)
+        # separate hidden layers from the same input tensor
         hidden_logs = self.hidden1(x)
-        return self.logits(hidden_logs)
+        hidden_vals = self.hidden2(x)
+        # return x  #, x
+        return self.logits(hidden_logs), self.value(hidden_vals)
 
     def action_value(self, obs):
         # executes call() under the hood
