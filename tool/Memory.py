@@ -42,6 +42,9 @@ class Memory:
             return self.getCol(key)
         else:
             return None
+            
+    def __getattr__(self, name):
+        return self.getCol(name)
 
     def reduce(self, count: int):
         indexes = random.sample(range(self.nbItems), count)

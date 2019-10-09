@@ -97,7 +97,7 @@ class ProbabilityDistribution(tf.keras.Model):
 
 class A2CModel(tf.keras.Model):
     def __init__(self, num_actions):
-        super(DQNModel, self).__init__()
+        super(A2CModel, self).__init__()
         # no tf.get_variable(), just simple Keras API
         self.hidden1 = kl.Dense(128, activation='relu')
         self.hidden2 = kl.Dense(128, activation='relu')
