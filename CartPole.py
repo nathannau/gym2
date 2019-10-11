@@ -22,7 +22,7 @@ model = tool.DQNModel(num_actions=env.action_space.n)
 agent = tool.DQNAgent(model)
 # agent = tool.A2CAgent(model)
 
-rewards_history = agent.train(env, updates=200)
+rewards_history = agent.train(env, batch_sz=100, updates=600, see_each=5)
 model.save_weights('truc_w.tf')
 # tf.keras.models.save_model(model, 'truc.tf')
 print("Finished training, testing...")
